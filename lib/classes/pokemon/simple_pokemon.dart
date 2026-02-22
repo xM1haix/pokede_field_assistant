@@ -2,10 +2,11 @@ import "dart:convert";
 
 import "package:pokede_field_assistant/classes/bookmarks.dart";
 import "package:pokede_field_assistant/classes/parameters.dart";
+import "package:pokede_field_assistant/extensions/string.dart";
 import "package:pokede_field_assistant/others/http_request.dart";
 
-class Pokemon {
-  Pokemon({
+class SimplePokemon {
+  SimplePokemon({
     required this.id,
     required this.url,
     required this.name,
@@ -22,23 +23,12 @@ class Pokemon {
   final String url;
   final String imageUrl;
   bool isBookmarked;
-  Future<bool> removeBookmark() async {
-    try {
-      final result = await BookmarkService.instance.removeBookmark(name);
-      isBookmarked = false;
-      return true;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<bool> switchBookmark() async =>
       BookmarkService.instance.switchBookmark(name, isBookmarked: isBookmarked);
   @override
   String toString() =>
-      // ignore: lines_longer_than_80_chars
-      "Pokemon(id : $id, type : $type, imageUrl : $imageUrl, name : $name, url : $url)";
-  static Future<List<Pokemon>> readAll(Parameters parameters) async {
+      "Pokemon(id:$id,type:$type,imageUrl:$imageUrl,name:$name,url:$url,isBookmarked:$isBookmarked)";
+  static Future<List<SimplePokemon>> readAll(Parameters parameters) async {
     try {
       final apiCall = await callAPI(apiURL, parameters);
       final decodedReponse = jsonDecode(apiCall) as Map<String, dynamic>;
@@ -50,16 +40,45 @@ class Pokemon {
           (url as String).split("/").where((e) => e.isNotEmpty).last,
         );
         final fullData = await callAPI("pokemon/$id/", Parameters());
-        final detailData = jsonDecode(fullData);
-        final name = e["name"];
-        return Pokemon(
+        final details = jsonDecode(fullData);
+        final name = e["name"] as String;
+        return SimplePokemon(
           id: id,
           url: url,
-          name: name,
+          name: name.capitalizeFirst,
           isBookmarked: BookmarkService.instance.isBookmark(name),
-          type: detailData["types"][0]["type"]["name"],
+          type: (details["types"][0]["type"]["name"] as String).toUpperCase(),
           imageUrl:
-              detailData["sprites"]["other"]["official-artwork"]["front_default"],
+              details["sprites"]["other"]["official-artwork"]["front_default"],
+        );
+      }).toList();
+      final allPokemon = await Future.wait(futures);
+      return allPokemon;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<List<SimplePokemon>> readBookmarks(
+    Parameters parameters,
+  ) async {
+    try {
+      final bookmarks = BookmarkService.instance.getAll();
+      if (bookmarks.isEmpty) {
+        return [];
+      }
+      final futures = bookmarks.map((e) async {
+        final url = "${baseAPIUrl}pokemon/$e";
+        final fullData = await callAPI("pokemon/$e/", Parameters());
+        final details = jsonDecode(fullData);
+        return SimplePokemon(
+          isBookmarked: true,
+          url: url,
+          name: e.capitalizeFirst,
+          id: int.parse(details["id"]),
+          type: (details["types"][0]["type"]["name"] as String).toUpperCase(),
+          imageUrl:
+              details["sprites"]["other"]["official-artwork"]["front_default"],
         );
       }).toList();
       final allPokemon = await Future.wait(futures);
@@ -69,17 +88,3 @@ class Pokemon {
     }
   }
 }
-      // final List results = json.decode(response.body)["results"];
-      // final detailFutures = results.map((pokemon) {
-      //   return http.get(Uri.parse(pokemon["url"]));
-      // }).toList();
-      // final detailResponses = await Future.wait(detailFutures);
-      // final result = detailResponses.map((res) {
-      //   final data = json.decode(res.body);
-      //   return {
-      //     "name": data["name"],
-      //     "type": data["types"][0]["type"]["name"],
-      //     "sprite": data["sprites"]["front_default"],
-      //   };
-      // }).toList();
-      // return result;

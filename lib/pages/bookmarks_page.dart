@@ -10,14 +10,14 @@ import "package:pokede_field_assistant/pages/details_page.dart";
 import "package:pokede_field_assistant/widgets/custom_hero.dart";
 import "package:pokede_field_assistant/widgets/list_builder.dart";
 
-class PokemonsPage extends StatefulWidget {
-  const PokemonsPage({super.key});
+class BookmarksPage extends StatefulWidget {
+  const BookmarksPage({super.key});
 
   @override
-  State<PokemonsPage> createState() => _PokemonsPageState();
+  State<BookmarksPage> createState() => _BookmarksPageState();
 }
 
-class _PokemonsPageState extends State<PokemonsPage> {
+class _BookmarksPageState extends State<BookmarksPage> {
   var _isListMode = true;
   final _parameters = Parameters(page: 0, limit: 100);
   late Future<List<SimplePokemon>> _future;
@@ -44,7 +44,7 @@ class _PokemonsPageState extends State<PokemonsPage> {
         onRefresh: () async => _init(),
         future: _future,
         builderHelper: BuilderHelper<SimplePokemon>(
-          onTap: _navToDetails,
+          onTap: (x) => context.nav(DetailsPage(x)),
           title: (x) => x.name,
           subTitle: (x) => x.type,
           icon: (x) => CustomHero(tag: x.id, url: x.imageUrl),
@@ -102,11 +102,6 @@ class _PokemonsPageState extends State<PokemonsPage> {
       });
       return x;
     });
-  }
-
-  Future<void> _navToDetails(SimplePokemon pokemon) async {
-    await context.nav(DetailsPage(pokemon));
-    setState(() {});
   }
 
   bool _onNotification(ScrollUpdateNotification e) {

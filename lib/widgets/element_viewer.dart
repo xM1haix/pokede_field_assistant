@@ -3,10 +3,6 @@ import "package:pokede_field_assistant/classes/builder_helper.dart";
 import "package:pokede_field_assistant/widgets/custom_grid_view.dart";
 import "package:pokede_field_assistant/widgets/custom_list_view.dart";
 
-bool _onNotification(ScrollUpdateNotification e) {
-  return true;
-}
-
 class ElementViewer<T> extends StatelessWidget {
   const ElementViewer({
     required this.onNotification,

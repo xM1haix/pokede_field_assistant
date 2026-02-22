@@ -1,7 +1,11 @@
 import "package:flutter/material.dart";
 
-class FavIcon extends StatelessWidget {
-  const FavIcon({required this.onTap, required this.isFav, super.key});
+class BookmarkIconButton extends StatelessWidget {
+  const BookmarkIconButton({
+    required this.onTap,
+    required this.isFav,
+    super.key,
+  });
   final void Function() onTap;
   final bool isFav;
 

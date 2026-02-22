@@ -4,6 +4,8 @@ class BookmarkService {
   BookmarkService._();
   static final instance = BookmarkService._();
   final _pokemnonBookmarksKey = "pokemon_bookmarks";
+  List<String> getAll() =>
+      SharedPrefsService.instance.readStringList(_pokemnonBookmarksKey) ?? [];
   bool isBookmark(String value) =>
       SharedPrefsService.instance.isInStringList(_pokemnonBookmarksKey, value);
   Future<bool> removeBookmark(String value) async => SharedPrefsService.instance

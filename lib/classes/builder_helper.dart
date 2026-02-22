@@ -1,6 +1,6 @@
 import "package:flutter/widgets.dart";
 import "package:pokede_field_assistant/classes/fav_icon_helper.dart";
-import "package:pokede_field_assistant/widgets/fav_icon.dart";
+import "package:pokede_field_assistant/widgets/bookmark_icon_button.dart";
 
 class BuilderHelper<T> {
   BuilderHelper({
@@ -19,7 +19,7 @@ class BuilderHelper<T> {
     if (favIconHelper == null) {
       return const SizedBox.shrink();
     }
-    return FavIcon(
+    return BookmarkIconButton(
       isFav: favIconHelper!.isFav(data),
       onTap: () => favIconHelper!.onFavTap(data),
     );

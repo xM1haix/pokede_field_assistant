@@ -18,14 +18,14 @@ class ListViewElement<T> extends StatefulWidget {
 
 class _ListViewElementState<T> extends State<ListViewElement<T>> {
   var _isHovered = false;
-  late final _bh = widget.builderHelper;
-  late final _e = widget.data;
   @override
   Widget build(BuildContext context) {
+    late final bh = widget.builderHelper;
+    late final e = widget.data;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: InkWell(
-        onTap: () => _bh.onTap(_e),
+        onTap: () => bh.onTap(e),
         borderRadius: BorderRadius.circular(10),
         onHover: (x) => setState(() => _isHovered = x),
         child: AnimatedContainer(
@@ -54,11 +54,11 @@ class _ListViewElementState<T> extends State<ListViewElement<T>> {
             ),
             child: Row(
               children: [
-                _bh.icon(_e),
+                bh.icon(e),
                 const SizedBox(width: 30),
-                Text("${_bh.title(_e)}\n${_bh.subTitle(_e)}"),
+                Text("${bh.title(e)}\n${bh.subTitle(e)}"),
                 const Spacer(),
-                _bh.favIcon(_e),
+                bh.favIcon(e),
               ],
             ),
           ),

@@ -29,7 +29,7 @@ class SharedPrefsService {
       throw "List not founded";
     }
     if (!originalList.contains(removedValue)) {
-      throw "Element not founded in the list";
+      return true;
     }
     originalList.remove(removedValue);
     return setStringList(key, originalList);

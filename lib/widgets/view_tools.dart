@@ -1,36 +1,31 @@
-import "dart:async";
-
 import "package:flutter/material.dart";
-import "package:pokede_field_assistant/classes/viewer_tool_helper.dart";
-import "package:pokede_field_assistant/widgets/list_grid_icon_button.dart";
+import "package:pokede_field_assistant/classes/navigator_helper.dart";
+import "package:pokede_field_assistant/classes/switch_view_helper.dart";
+import "package:pokede_field_assistant/others/popup.dart";
 
 class ViewerTools extends StatelessWidget {
   const ViewerTools({
-    required this.goToPage,
-    required this.popupToChangeTheNumOnPage,
-    required this.theList,
-    required this.viewerToolHelper,
-    required this.switchView,
-    required this.isList,
-
+    required this.child,
+    required this.showTools,
+    required this.switchViewHelper,
+    required this.navigatorHelper,
     super.key,
   });
-  final Widget theList;
-  final ViewerToolHelper viewerToolHelper;
-  final bool isList;
-  final void Function() switchView;
-  final void Function(int newPage) goToPage;
-  final Future<void> Function() popupToChangeTheNumOnPage;
+  final SwitchViewHelper switchViewHelper;
+  final Widget child;
+  final bool showTools;
+  final NavigatorHelper navigatorHelper;
 
   @override
   Widget build(BuildContext context) {
-    final showTools = viewerToolHelper.showTools;
-    final numOfPages = viewerToolHelper.numOfPages;
-    final currentPage = viewerToolHelper.currentPage;
+    final numOfPages = navigatorHelper.numOfPages;
+    final currentPage = navigatorHelper.currentPage;
+    final goToPage = navigatorHelper.navigateToPage;
+    final numOnPage = navigatorHelper.numOnPage;
 
     return Stack(
       children: [
-        theList,
+        child,
         AnimatedAlign(
           duration: const Duration(milliseconds: 350),
           alignment: Alignment(0, showTools ? -1 : -1.5),
@@ -50,10 +45,18 @@ class ViewerTools extends StatelessWidget {
                   SizedBox(width: 300, child: TextField(onSubmitted: (x) {})),
 
                   IconButton(
-                    onPressed: () => popupToChangeTheNumOnPage,
-                    icon: Text("${viewerToolHelper.numOnPage}"),
+                    onPressed: () async {
+                      final newValue = await changeNumOnPage(
+                        context: context,
+                        initialValue: numOnPage,
+                      );
+                      if (newValue != null) {
+                        navigatorHelper.changeTheNumOnPage(newValue);
+                      }
+                    },
+                    icon: Text("$numOnPage"),
                   ),
-                  ListGridIconButton(onTap: switchView, isList: isList),
+                  switchViewHelper.toWidget(),
                 ],
               ),
             ),
@@ -73,7 +76,7 @@ class ViewerTools extends StatelessWidget {
             ),
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final maxButtons = (constraints.maxWidth / 48).floor();
+                final maxButtons = (constraints.maxWidth / 75).floor();
                 int startIndex;
                 int endIndex;
                 final halfButtons = maxButtons ~/ 2;

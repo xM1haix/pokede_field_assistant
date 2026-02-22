@@ -13,10 +13,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("PokeDe Field Assistant"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("PokeDe Field Assistant")),
       body: ListView(
         children: [
           const Center(child: Text("Welcome to PokeDe Field Assistant!")),
