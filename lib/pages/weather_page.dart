@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
+import "package:pokede_field_assistant/classes/coords.dart";
 import "package:pokede_field_assistant/classes/open_metro.dart";
 import "package:pokede_field_assistant/widgets/custom_future_builder.dart";
 
@@ -11,41 +11,18 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-  var lat = 45.4;
-  var lon = 54.5;
-  final _controllerLatitude = TextEditingController();
-  final _controllerLongitude = TextEditingController();
+  final _coords = Coords(0, 0);
   late Future<WeatherData> _future;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: setCoords),
       appBar: AppBar(),
       body: CustomFutureBuilder(
         future: _future,
         success: (context, x) => ListView(
           children: [
-            TextField(
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly, // allow digits only
-              ],
-              keyboardType: TextInputType.number,
-
-              controller: _controllerLatitude,
-              decoration: const InputDecoration(hintText: "latitude"),
-            ),
-            TextField(
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly, // allow digits only
-              ],
-              keyboardType: TextInputType.number,
-
-              controller: _controllerLongitude,
-              decoration: const InputDecoration(hintText: "longitude"),
-            ),
-            ListTile(title: Text("latitude:${x.latitude}")),
-            ListTile(title: Text("longitude:${x.longitude}")),
             ListTile(title: Text("temperature:${x.temperature}")),
-            ListTile(title: Text("weatherCode:${x.weatherCode}")),
             ListTile(title: Text("windspeed:${x.windspeed}")),
           ],
         ),
@@ -59,7 +36,15 @@ class _WeatherPageState extends State<WeatherPage> {
     _init();
   }
 
+  Future<void> setCoords() async {
+    final newCoords = await Coords.popupCoords(context, _coords);
+    setState(() {
+      _coords.reset(newCoords);
+      _init();
+    });
+  }
+
   void _init() {
-    _future = WeatherService().fetchCurrentWeather(lat, lon);
+    _future = WeatherService().fetchCurrentWeather(_coords);
   }
 }

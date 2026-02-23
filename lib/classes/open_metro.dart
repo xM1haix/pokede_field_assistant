@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import "package:http/http.dart" as http;
+import "package:pokede_field_assistant/classes/coords.dart";
 
 class WeatherData {
   WeatherData({
@@ -31,9 +32,9 @@ class WeatherData {
 class WeatherService {
   static const _baseUrl = "https://api.open-meteo.com/v1/forecast";
 
-  Future<WeatherData> fetchCurrentWeather(double lat, double lon) async {
+  Future<WeatherData> fetchCurrentWeather(Coords coords) async {
     final url = Uri.parse(
-      "$_baseUrl?latitude=$lat&longitude=$lon&current_weather=true",
+      "$_baseUrl?latitude=${coords.latitude}&longitude=${coords.longitude}&current_weather=true",
     );
 
     try {

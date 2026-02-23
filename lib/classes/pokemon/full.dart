@@ -52,7 +52,7 @@ class FullPokemon {
           .map((e) => PokemonStat.fromJson(e))
           .toList(),
       types: (json["types"] as List)
-          .map((e) => PokemonType.fromJson(e))
+          .map((e) => PokemonTypeSimple.fromJson(e))
           .toList(),
     );
   }
@@ -72,7 +72,7 @@ class FullPokemon {
   final PokemonSprites sprites;
   final List<PokemonStat> stats;
 
-  final List<PokemonType> types;
+  final List<PokemonTypeSimple> types;
 
   static Future<FullPokemon> getFullData(int id) async {
     final result = await callAPI(
@@ -183,10 +183,10 @@ class PokemonStat {
   final NamedAPIResource stat;
 }
 
-class PokemonType {
-  PokemonType({required this.slot, required this.type});
-  factory PokemonType.fromJson(Map<String, dynamic> json) {
-    return PokemonType(
+class PokemonTypeSimple {
+  PokemonTypeSimple({required this.slot, required this.type});
+  factory PokemonTypeSimple.fromJson(Map<String, dynamic> json) {
+    return PokemonTypeSimple(
       slot: json["slot"],
       type: NamedAPIResource.fromJson(json["type"]),
     );

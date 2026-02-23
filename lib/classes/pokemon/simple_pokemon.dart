@@ -30,34 +30,6 @@ class SimplePokemon {
   @override
   String toString() =>
       "Pokemon(id:$id,type:$type,imageUrl:$imageUrl,name:$name,url:$url,isBookmarked:$isBookmarked)";
-  static Future<List<SimplePokemon>> readBookmarks(
-    Parameters parameters,
-  ) async {
-    try {
-      final bookmarks = BookmarkService.instance.getAll();
-      if (bookmarks.isEmpty) {
-        return [];
-      }
-      final futures = bookmarks.map((e) async {
-        final url = "https://pokeapi.co/api/v2/pokemon/$e/";
-        final fullData = await callAPI(url, Parameters());
-        final details = jsonDecode(fullData);
-        return SimplePokemon(
-          isBookmarked: true,
-          url: url,
-          name: e.capitalizeFirst,
-          id: int.parse(details["id"]),
-          type: (details["types"][0]["type"]["name"] as String).toUpperCase(),
-          imageUrl:
-              details["sprites"]["other"]["official-artwork"]["front_default"],
-        );
-      }).toList();
-      final allPokemon = await Future.wait(futures);
-      return allPokemon;
-    } catch (e) {
-      rethrow;
-    }
-  }
 
   static Future<List<SimplePokemon>> searchByName(
     Parameters parameters,
