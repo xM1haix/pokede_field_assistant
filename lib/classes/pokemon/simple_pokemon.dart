@@ -67,7 +67,6 @@ class SimplePokemon {
       final newParameters = searchedName.isEmpty
           ? parameters
           : Parameters(limit: 2000);
-      print(newParameters);
       final apiCall = await callAPI(
         "https://pokeapi.co/api/v2/pokemon/",
         newParameters,
