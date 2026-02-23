@@ -12,10 +12,16 @@ class CustomCacheNetworkImg extends StatelessWidget {
       fit: BoxFit.contain,
       imageUrl: url,
       placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Tooltip(
-        message: error.toString(),
-        child: const Icon(Icons.warning_amber, color: Colors.red),
-      ),
+      errorWidget: (context, url, error) => const SizedBox.shrink(),
+      // errorWidget: (context, url, error) => Tooltip(
+      //   message: error.toString(),
+      //   child: IconButton(
+      //     onPressed: () {
+      //       print(error);
+      //     },
+      //     icon: const Icon(Icons.warning_amber, color: Colors.red),
+      //   ),
+      // ),
     );
   }
 }

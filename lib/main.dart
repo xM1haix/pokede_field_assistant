@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:pokede_field_assistant/classes/shared_pref_helper.dart";
-import "package:pokede_field_assistant/pages/home_page.dart";
+import "package:pokede_field_assistant/pokemons_page.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(centerTitle: true),
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: const HomePage(),
+      home: const PokemonsPage(),
     );
   }
 }

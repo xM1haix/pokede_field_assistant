@@ -1,9 +1,7 @@
 import "package:http/http.dart" as http;
-import "package:pokede_field_assistant/classes/parameters.dart";
 
-Future<String> callAPI(String url, Parameters parameters) async {
-  final uri = Uri.parse(url).replace(queryParameters: parameters.toMap());
-  final response = await http.get(uri);
+Future<String> callAPI(String url) async {
+  final response = await http.get(Uri.parse(url));
   response.ensureSuccess();
   return response.body;
 }
