@@ -1,11 +1,8 @@
 import "package:http/http.dart" as http;
 import "package:pokede_field_assistant/classes/parameters.dart";
 
-const baseAPIUrl = "https://pokeapi.co/api/v2/";
-Future<String> callAPI(String endpoint, Parameters parameters) async {
-  final uri = Uri.parse(
-    baseAPIUrl + endpoint,
-  ).replace(queryParameters: parameters.toMap());
+Future<String> callAPI(String url, Parameters parameters) async {
+  final uri = Uri.parse(url).replace(queryParameters: parameters.toMap());
   final response = await http.get(uri);
   response.ensureSuccess();
   return response.body;

@@ -75,7 +75,10 @@ class FullPokemon {
   final List<PokemonType> types;
 
   static Future<FullPokemon> getFullData(int id) async {
-    final result = await callAPI("pokemon/$id", Parameters());
+    final result = await callAPI(
+      "https://pokeapi.co/api/v2/pokemon/$id",
+      Parameters(),
+    );
     final decodedReponse = jsonDecode(result) as Map<String, dynamic>;
     return FullPokemon.fromJson(decodedReponse);
   }

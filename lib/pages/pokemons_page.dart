@@ -19,6 +19,7 @@ class PokemonsPage extends StatefulWidget {
 
 class _PokemonsPageState extends State<PokemonsPage> {
   var _isListMode = true;
+  var _searchName = "";
   final _parameters = Parameters(page: 0, limit: 100);
   late Future<List<SimplePokemon>> _future;
   var _showTools = true;
@@ -29,6 +30,7 @@ class _PokemonsPageState extends State<PokemonsPage> {
       appBar: AppBar(title: const Text("Pokemons")),
       body: ListBuilder(
         navigatorHelper: NavigatorHelper(
+          onSubmitted: _onSubmitted,
           currentPage: _parameters.page!,
           numOfPages: _numOfPages,
           navigateToPage: _goToPage,
@@ -63,24 +65,6 @@ class _PokemonsPageState extends State<PokemonsPage> {
     _init();
   }
 
-  void onSubmitted(String value) {
-    if (value.isEmpty) {
-      if (_parameters.name == null) {
-        //DO NOTHING
-      } else {
-        _parameters.name = value;
-        _parameters.page = 0;
-      }
-    } else {
-      if (_parameters.name == value) {
-        //DO NOTHING
-      } else {
-        _parameters.name = value;
-        _parameters.page = 0;
-      }
-    }
-  }
-
   void _changeTheNumOnPage(int newValue) {
     setState(() {
       _parameters.limit = newValue;
@@ -96,7 +80,7 @@ class _PokemonsPageState extends State<PokemonsPage> {
   }
 
   void _init() {
-    _future = SimplePokemon.readAll(_parameters).then((x) {
+    _future = SimplePokemon.searchByName(_parameters, _searchName).then((x) {
       setState(() {
         _numOfPages = SimplePokemon.counter ~/ _parameters.limit!;
       });
@@ -112,6 +96,14 @@ class _PokemonsPageState extends State<PokemonsPage> {
   bool _onNotification(ScrollUpdateNotification e) {
     setState(() => _showTools = e.scrollDelta! < 0);
     return true;
+  }
+
+  void _onSubmitted(String value) {
+    print("called");
+    _parameters.page = 0;
+    _searchName = value;
+    _init();
+    setState(() {});
   }
 
   Future<void> _saveToBookmarks(SimplePokemon x) async {

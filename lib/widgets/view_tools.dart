@@ -42,7 +42,10 @@ class ViewerTools extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(width: 300, child: TextField(onSubmitted: (x) {})),
+                  SizedBox(
+                    width: 300,
+                    child: TextField(onSubmitted: navigatorHelper.onSubmitted),
+                  ),
 
                   IconButton(
                     onPressed: () async {

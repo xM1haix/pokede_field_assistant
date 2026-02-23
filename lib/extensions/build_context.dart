@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 extension ExtensionOnBuildContext on BuildContext {
   ///Reusable and shorter function which will get the
   ///[BuildContext] as [context] and the [x] as any parameter to return
-  void back([x]) => Navigator.pop(this, x);
+  void back<T>([T? x]) => Navigator.pop(this, x);
 
   ///Reusable and shorter Future which will navigate to
   ///thewidget[location] also returns [T] if provided

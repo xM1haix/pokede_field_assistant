@@ -5,7 +5,7 @@ import "package:pokede_field_assistant/pages/home_page.dart";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefsService.instance.init();
-  const MyApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
